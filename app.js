@@ -34,20 +34,20 @@ app.get("/",function(req,res){
   };
   var day = today.toLocaleDateString("en-US",options);
   Item.find({},function(err,foundItems){
-    if(foundItems.length===0){
-      Item.insertMany(collectionitems,function(err){
-        if(err){
-          console.log("Error");
-        }
-        else{
-          console.log("Success");
-        }
-      });
-      res.redirect("/");
-    }
-    else{
-      res.render("list",{listTitle: day,newlistitem: foundItems});
-    }
+    // if(foundItems.length===0){
+    //   Item.insertMany(collectionitems,function(err){
+    //     if(err){
+    //       console.log("Error");
+    //     }
+    //     else{
+    //       console.log("Success");
+    //     }
+    //   });
+    //   res.redirect("/");
+    // }
+    // else{
+    res.render("list",{listTitle: day,newlistitem: foundItems});
+    // }
   });
 
 
@@ -61,6 +61,19 @@ app.post("/",function(req,res){
   item.save();
   res.redirect("/");
 });
+
+app.post("/delete",function(req,res){
+  const checkeditem = req.body.checkbox;
+  Item.findByIdAndRemove(checkeditem,function(err){
+    if(!err){
+      console.log("Successfully deleted");
+      res.redirect("/");
+    }
+
+  });
+});
+
+
 app.listen(3000,function(){
   console.log("Server Started");
 });
